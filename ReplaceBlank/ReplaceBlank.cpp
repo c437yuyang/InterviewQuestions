@@ -7,49 +7,119 @@
 #include "stdafx.h"
 #include <string>
 
-/*length 为字符数组string的总容量*/
-void ReplaceBlank(char string[], int length)
+///*length 为字符数组string的总容量*/
+//void ReplaceBlank(char string[], int length)
+//{
+//    if(string == NULL && length <= 0)
+//        return;
+//
+//    /*originalLength 为字符串string的实际长度*/
+//    int originalLength = 0;
+//    int numberOfBlank = 0;
+//    int i = 0;
+//    while(string[i] != '\0')
+//    {
+//        ++ originalLength;
+//
+//        if(string[i] == ' ')
+//            ++ numberOfBlank;
+//
+//        ++ i;
+//    }
+//
+//    /*newLength 为把空格替换成'%20'之后的长度*/
+//    int newLength = originalLength + numberOfBlank * 2;
+//    if(newLength > length)
+//        return;
+//
+//    int indexOfOriginal = originalLength;
+//    int indexOfNew = newLength;
+//    while(indexOfOriginal >= 0 && indexOfNew > indexOfOriginal)
+//    {
+//        if(string[indexOfOriginal] == ' ')
+//        {
+//            string[indexOfNew --] = '0';
+//            string[indexOfNew --] = '2';
+//            string[indexOfNew --] = '%';
+//        }
+//        else
+//        {
+//            string[indexOfNew --] = string[indexOfOriginal];
+//        }
+//
+//        -- indexOfOriginal;
+//    }
+//}
+
+
+#pragma region My
+//方法1，暴力方法，O(n^2)
+//void ReplaceBlank(char string[], int length)  //length是数组的最大容量
+//{
+//	if (string == NULL)
+//		return;
+//	int originlength = 0;
+//	for (int i = 0; string[i] != '\0'; ++i)
+//		++originlength;
+//
+//	for (int i = 0; string[i] != '\0'; ++i)
+//	{
+//		if (string[i] == ' ')
+//		{
+//			originlength += 2;
+//			if (originlength > length) //超出容量范围直接返回
+//				return;
+//			//从尾部向前面依次移动
+//			string[originlength] = '\0'; //先把尾部置为'\0'
+//			for (int j = originlength - 1; j != i + 2; --j)
+//			{
+//				string[j] = string[j - 2];
+//			}
+//			//最后再赋值指定位
+//			string[i] = '%';
+//			string[++i] = '2';
+//			string[++i] = '0';
+//		}
+//	}
+//}
+
+//方法2:O(n),先遍历一遍得到最终长度，然后再从后往前拷贝替换
+void ReplaceBlank(char string[], int length)  //length是数组的最大容量
 {
-    if(string == NULL && length <= 0)
-        return;
+	if (string == NULL)
+		return;
+	int originlength = 0;
+	int newLength = 0;
+	for (int i = 0; string[i] != '\0'; ++i) {
+		++originlength;
+		++newLength;
+		if (string[i] == ' ')
+			newLength += 2;
+	}
+	if (newLength > length)
+		return;
 
-    /*originalLength 为字符串string的实际长度*/
-    int originalLength = 0;
-    int numberOfBlank = 0;
-    int i = 0;
-    while(string[i] != '\0')
-    {
-        ++ originalLength;
+	string[newLength] = '\0';
+	int j = originlength - 1;
+	for (int i = newLength - 1; i >= 0;)
+	{
+		if (string[j] == ' ')
+		{
+			string[i] = '0';
+			string[i - 1] = '2';
+			string[i - 2] = '%';
+			i -= 3;
+			j -= 1;
+		}
+		else
+		{
+			string[i--] = string[j--];
+		}
+	}
 
-        if(string[i] == ' ')
-            ++ numberOfBlank;
-
-        ++ i;
-    }
-
-    /*newLength 为把空格替换成'%20'之后的长度*/
-    int newLength = originalLength + numberOfBlank * 2;
-    if(newLength > length)
-        return;
-
-    int indexOfOriginal = originalLength;
-    int indexOfNew = newLength;
-    while(indexOfOriginal >= 0 && indexOfNew > indexOfOriginal)
-    {
-        if(string[indexOfOriginal] == ' ')
-        {
-            string[indexOfNew --] = '0';
-            string[indexOfNew --] = '2';
-            string[indexOfNew --] = '%';
-        }
-        else
-        {
-            string[indexOfNew --] = string[indexOfOriginal];
-        }
-
-        -- indexOfOriginal;
-    }
 }
+#pragma endregion
+
 
 void Test(char* testName, char string[], int length, char expected[])
 {
@@ -146,6 +216,9 @@ void Test9()
     Test("Test9", string, length, "%20%20%20");
 }
 
+
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
     Test1();
@@ -157,6 +230,7 @@ int _tmain(int argc, _TCHAR* argv[])
     Test7();
     Test8();
     Test9();
+	system("pause");
 
     return 0;
 }

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>07_QueueWithTwoStacks</ProjectName>
+    <ProjectName>07_01_QueueWithTwoStacks</ProjectName>
     <ProjectGuid>{720F9BC6-F965-46D1-84C5-F1817C3E8A0F}</ProjectGuid>
     <RootNamespace>QueueWithTwoStacks</RootNamespace>
     <Keyword>Win32Proj</Keyword>

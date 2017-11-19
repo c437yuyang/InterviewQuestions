@@ -7,7 +7,7 @@
 #include "stdafx.h"
 #include <math.h>
 
-bool g_InvalidInput = false;
+bool g_InvalidInput = false; //使用全局变量处理错误
 bool equal(double num1, double num2);
 double PowerWithUnsignedExponent(double base, unsigned int exponent);
  
@@ -50,7 +50,7 @@ double PowerWithUnsignedExponent(double base, unsigned int exponent)
     if(exponent == 1)
         return base;
 
-    double result = PowerWithUnsignedExponent(base, exponent >> 1);
+    double result = PowerWithUnsignedExponent(base, exponent >> 1);//右移一位，奇数就是(n-1)/2，偶数就是n/2
     result *= result;
     if((exponent & 0x1) == 1)
         result *= base;

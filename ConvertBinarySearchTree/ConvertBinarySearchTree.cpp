@@ -5,43 +5,94 @@
 // 著作权所有者：何海涛
 
 #include "stdafx.h"
+#include <iostream>
+#include <vector>
 #include "..\Utilities\BinaryTree.h"
 
+#pragma region My Own
+
+//我的思路:先中序遍历二叉树，然后加入到一个vector里面，之后再来进行节点的连接操作即可
+
+void InOrderAddToNodes(BinaryTreeNode * pRoot, std::vector<BinaryTreeNode *> &nodes);
+BinaryTreeNode* Convert(BinaryTreeNode* pRootOfTree)
+{
+
+	if (pRootOfTree == nullptr)
+		return nullptr;
+	//先添加到vector
+	std::vector<BinaryTreeNode *> nodes;
+	InOrderAddToNodes(pRootOfTree,nodes);
+	//再执行连接
+	for (int i = 0; i < nodes.size() - 1; ++i)
+	{
+		nodes[i]->m_pRight = nodes[i + 1];
+	}
+
+	for (int i = nodes.size()-1; i > 0; --i)
+	{
+		nodes[i]->m_pLeft = nodes[i - 1];
+	}
+
+	return nodes[0];
+}
+
+void InOrderAddToNodes(BinaryTreeNode * pRoot, std::vector<BinaryTreeNode *> &nodes)
+{
+	if (pRoot == nullptr)
+		return;
+	if (pRoot->m_pLeft != nullptr)
+		InOrderAddToNodes(pRoot->m_pLeft,nodes);
+
+	nodes.push_back(pRoot);
+
+	if (pRoot->m_pRight != nullptr)
+		InOrderAddToNodes(pRoot->m_pRight,nodes);
+}
+
+
+#pragma endregion
+
+
+
+#pragma region 书上的版本，没看懂
 void ConvertNode(BinaryTreeNode* pNode, BinaryTreeNode** pLastNodeInList);
 
 BinaryTreeNode* Convert(BinaryTreeNode* pRootOfTree)
 {
-    BinaryTreeNode *pLastNodeInList = NULL;
-    ConvertNode(pRootOfTree, &pLastNodeInList);
+	BinaryTreeNode *pLastNodeInList = NULL;
+	ConvertNode(pRootOfTree, &pLastNodeInList);
 
-    // pLastNodeInList指向双向链表的尾结点，
-    // 我们需要返回头结点
-    BinaryTreeNode *pHeadOfList = pLastNodeInList;
-    while(pHeadOfList != NULL && pHeadOfList->m_pLeft != NULL)
-        pHeadOfList = pHeadOfList->m_pLeft;
+	// pLastNodeInList指向双向链表的尾结点，
+	// 我们需要返回头结点
+	BinaryTreeNode *pHeadOfList = pLastNodeInList;
+	while (pHeadOfList != NULL && pHeadOfList->m_pLeft != NULL)
+		pHeadOfList = pHeadOfList->m_pLeft;
 
-    return pHeadOfList;
+	return pHeadOfList;
 }
 
 void ConvertNode(BinaryTreeNode* pNode, BinaryTreeNode** pLastNodeInList)
 {
-    if(pNode == NULL)
-        return;
+	if (pNode == NULL)
+		return;
 
-    BinaryTreeNode *pCurrent = pNode;
+	BinaryTreeNode *pCurrent = pNode;
 
-    if (pCurrent->m_pLeft != NULL)
-        ConvertNode(pCurrent->m_pLeft, pLastNodeInList);
+	if (pCurrent->m_pLeft != NULL) //如果还有左子树，就一直往左找，知道找到没有左子树的节点
+		ConvertNode(pCurrent->m_pLeft, pLastNodeInList);
 
-    pCurrent->m_pLeft = *pLastNodeInList; 
-    if(*pLastNodeInList != NULL)
-        (*pLastNodeInList)->m_pRight = pCurrent;
+	pCurrent->m_pLeft = *pLastNodeInList;
+	if (*pLastNodeInList != NULL)
+		(*pLastNodeInList)->m_pRight = pCurrent;
 
-    *pLastNodeInList = pCurrent;
+	*pLastNodeInList = pCurrent;
 
-    if (pCurrent->m_pRight != NULL)
-        ConvertNode(pCurrent->m_pRight, pLastNodeInList);
+	if (pCurrent->m_pRight != NULL)
+		ConvertNode(pCurrent->m_pRight, pLastNodeInList);
 }
+#pragma endregion
+
+
 
 // ====================测试代码====================
 void PrintDoubleLinkedList(BinaryTreeNode* pHeadOfList)
@@ -195,6 +246,9 @@ int _tmain(int argc, _TCHAR* argv[])
     Test3();
     Test4();
     Test5();
+
+
+	system("pause");
 
     return 0;
 }

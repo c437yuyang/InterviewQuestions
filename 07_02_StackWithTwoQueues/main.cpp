@@ -4,7 +4,7 @@ using namespace std;
 
 int main() 
 {
-	CStack<int > s;
+	CStack<int> s;
 
 	s.push(1);
 	s.push(2);

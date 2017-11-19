@@ -110,6 +110,8 @@ int _tmain(int argc, _TCHAR* argv[])
     //  ‰»ÎNULL
     Test(NULL, 0, 0);
 
+
+	system("pause");
     return 0;
 }
 

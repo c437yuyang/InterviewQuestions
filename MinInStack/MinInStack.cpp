@@ -6,7 +6,7 @@
 
 #include "stdafx.h"
 #include "..\MinInStack\StackWithMin.h"
-
+//左程云的书上的版本(01_01_GetMinStack)的解法更优，其实就是每次压入辅助栈的时候，再判断一下，到底需不需要压入，如果最小值需要刷新才压入，弹出的时候也做相应的操作
 void Test(char* testName, const StackWithMin<int>& stack, int expected)
 {
     if(testName != NULL)

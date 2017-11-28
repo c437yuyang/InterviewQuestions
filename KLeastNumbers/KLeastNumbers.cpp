@@ -10,6 +10,7 @@
 #include <set>
 #include <vector>
 #include <iostream>
+#include <functional>
 
 using namespace std;
 
@@ -40,9 +41,31 @@ void GetLeastNumbers_Solution1(int* input, int n, int* output, int k)
         output[i] = input[i];
 }
 
+//自己实现Greater的方法:两种(一种模板类，一种模板函数)
+//struct Greater
+//{
+//	template<class T>
+//	constexpr bool operator()(const T& _Left, const T& _Right) const
+//	{	// apply operator< to operands
+//		return (_Left >= _Right);
+//	}
+//};
+
+template <typename T>
+struct Greater :public binary_function<const T&,const T&, bool>
+{
+	bool operator()(const T& left,const T&right) const
+	{
+		return (left >= right);
+	}
+};
+
 // ====================方法2====================
-typedef multiset<int, greater<int> >            intSet;
-typedef multiset<int, greater<int> >::iterator  setIterator;
+//typedef multiset<int, greater<int> >            intSet; //需要包含functional头文件
+//typedef multiset<int, greater<int> >::iterator  setIterator;
+
+typedef multiset<int, Greater<int> >            intSet; //需要包含functional头文件
+typedef multiset<int, Greater<int> >::iterator  setIterator;
 
 void GetLeastNumbers_Solution2(const vector<int>& data, intSet& leastNumbers, int k)
 {
@@ -61,7 +84,7 @@ void GetLeastNumbers_Solution2(const vector<int>& data, intSet& leastNumbers, in
         {
             setIterator iterGreatest = leastNumbers.begin();
 
-            if(*iter < *(leastNumbers.begin()))
+            if(*iter < *(iterGreatest))
             {
                 leastNumbers.erase(iterGreatest);
                 leastNumbers.insert(*iter);
@@ -175,6 +198,8 @@ int _tmain(int argc, _TCHAR* argv[])
     Test5();
     Test6();
     Test7();
+
+	system("pause");
 
     return 0;
 }
